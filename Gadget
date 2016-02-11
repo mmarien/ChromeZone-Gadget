@@ -1,0 +1,46 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<Module>
+<ModulePrefs title="Simple Clock" title_url="__MSG_title_url__" description="__MSG_description__" author="shiz" author_email="shiz.h.feedback+sclock@gmail.com" screenshot="http://www.amonya.com/igoogle/img/sc_screen.png" thumbnail="http://www.amonya.com/igoogle/img/sc_thumbnail.png" author_link="http://shizlabs.amonya.com/" height="70">
+<Require feature="dynamic-height"/>
+<Locale messages="http://www.amonya.com/igoogle/clock/sclock_content/sclock_en.xml"/>
+<Locale lang="ja" messages="http://www.amonya.com/igoogle/clock/sclock_content/sclock_ja.xml"/>
+</ModulePrefs>
+<UserPref name="size_format" display_name="__MSG_size_format__" datatype="enum" required="true">
+<EnumValue display_value="__MSG_tiny__" value="T"/>
+<EnumValue display_value="__MSG_small__" value="S"/>
+<EnumValue display_value="__MSG_medium__" value="M"/>
+<EnumValue display_value="__MSG_large__" value="L"/>
+</UserPref>
+<UserPref name="time_format" display_name="__MSG_time_format__" datatype="enum" default_value="1">
+<EnumValue display_value="0:00" value="1"/>
+<EnumValue display_value="0:00:00" value="2"/>
+<EnumValue display_value="AM 0:00" value="3"/>
+<EnumValue display_value="AM 0:00:00" value="4"/>
+<EnumValue display_value="0:00 AM" value="5"/>
+<EnumValue display_value="0:00:00 AM" value="6"/>
+<EnumValue display_value="00:00" value="7"/>
+<EnumValue display_value="00:00:00" value="8"/>
+</UserPref>
+<UserPref name="date_format" display_name="__MSG_date_format__" datatype="enum" default_value="__MSG_date_value__">
+<EnumValue display_value="Jan 11, 2007 (Mon)" value="1"/>
+<EnumValue display_value="January 11, 2007 (Monday)" value="2"/>
+<EnumValue display_value="2007/01/11 (Mon)" value="3"/>
+<EnumValue display_value="2007年01月11日 (月)" value="4"/>
+<EnumValue display_value="11 Jan 2007 (Mon)" value="5"/>
+<EnumValue display_value="11 January 2007 (Monday)" value="6"/>
+</UserPref>
+<UserPref name="color_format" display_name="__MSG_color_format__" default_value="#333333"/>
+<UserPref name="background_color_format" display_name="__MSG_background_color_format__" default_value="#FFFFFF"/>
+<UserPref name="colon_blink" display_name="__MSG_colon_blink__" datatype="bool" default_value="true"/>
+<Content type="html">
+<![CDATA[
+<script type="text/javascript"> /*外部リソースをキャッシュで取得*/ document.write('<style>'); document.write('@import "'+_IG_GetCachedUrl('http://www.amonya.com/css/reset-fonts.css')+'";'); document.write('</style>'); </script> <style> body { background-color:__UP_background_color_f
+]]>
+<![CDATA[
+ormat__; } #content_div { text-align:center; margin:5px; } #content_div p{ font-family: Arial, sans-serif; font-weight:bold; color:__UP_color_format__; } .del { color:__UP_background_color_format__; } </style> <script type="text/javascript"> var gPrefs = new _IG_Prefs(__MODULE_ID__); var
+]]>
+<![CDATA[
+gMonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; var gWeekNames = ['Sunday', 'Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday']; var gWeekNamesJP = ['日', '月', '火','水','木','金','土']; var gSize = {T:[12, 12], S:[24, 12], M:[32, 16], L:[100, 50]}; function clock(){ var now = new Date(); var year = now.getFullYear(); var month = fillZero(now.getMonth()+1); var monthName = gMonthNames[now.getMonth()]; var date = fillZero(now.getDate()); var day = now.getDay(); var dayName = gWeekNames[day]; var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds(); var sizeFormat = gPrefs.getString('size_format'); var timeFormat = gPrefs.getInt('time_format'); var dateFormat = gPrefs.getInt('date_format'); var html = ''; html += '<p style="font-size:'+gSize[sizeFormat][0]+'px;">'; switch (timeFormat){ case 1: html += hours; html += getColon(seconds); html += fillZero(minutes); break; case 2: html += hours+':'+fillZero(minutes); html += ':'+fillZero(seconds); break; case 3: html += '<span style="font-size:'+gSize[sizeFormat][1]+'px">'; html += (hours < 12) ? 'AM' : 'PM'; html += ' </span>'; html += getAmPmHours(hours); html += getColon(seconds); html += fillZero(minutes); break; case 4: html += '<span style="font-size:'+gSize[sizeFormat][1]+'px">'; html += (hours < 12) ? 'AM' : 'PM'; html += ' </span>'; html += getAmPmHours(hours); html += ':'; html += fillZero(minutes); html += ':'+fillZero(seconds); break; case 5: html += getAmPmHours(hours); html += getColon(seconds); html += fillZero(minutes); html += '<span style="font-size:'+gSize[sizeFormat][1]+'px"> '; html += (hours < 12) ? 'AM' : 'PM'; html += '</span>'; break; case 6: html += getAmPmHours(hours); html += ':'; html += fillZero(minutes); html += ':'+fillZero(seconds); html += '<span style="font-size:'+gSize[sizeFormat][1]+'px"> '; html += (hours < 12) ? 'AM' : 'PM'; html += '</span>'; break; case 7: html += fillZero(hours); html += getColon(seconds); html += fillZero(minutes); break; case 8: html += fillZero(hours)+':'+fillZero(minutes); html += ':'+fillZero(seconds); break; } if (sizeFormat != 'T'){ html += '</p>'; html += '<p style="font-size:'+gSize[sizeFormat][1]+'px;">'; }else{ html += '&nbsp;&nbsp;'; } switch (dateFormat){ case 1: html += monthName.substring(0,3)+' '+date+', '+year+' ('+dayName.substring(0,3)+')'; break; case 2: html += monthName+' '+date+', '+year+' ('+dayName+')'; break; case 3: html += year+'/'+month+'/'+date+' ('+dayName.substring(0,3)+')'; break; case 4: html += year+'年'+month+'月'+date+'日'+' ('+gWeekNamesJP[day]+')'; break; case 5: html += date+' '+monthName.substring(0,3)+' '+year+' ('+dayName.substring(0,3)+')'; break; case 6: html += date+' '+monthName+' '+year+' ('+dayName+')'; break; } html += '</p>'; _gel('content_div').innerHTML = html; setTimeout(clock,1000); } function getAmPmHours(hours){ if (hours == 0){ return 12; }else{ return (hours <= 12) ? hours : (hours-12); } } function getColon(seconds){ if (!gPrefs.getBool('colon_blink')){ return ':'; } return ((seconds % 2 == 0) ? ':' : '<span class="del">:</span>'); } function fillZero(num){ return (num < 10) ? '0'+num : num; } window.onload = function(){ clock(); _IG_AdjustIFrameHeight(); }; </script> <div id="content_div" />
+]]>
+</Content>
+</Module>
